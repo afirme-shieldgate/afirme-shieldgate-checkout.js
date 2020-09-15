@@ -1,140 +1,141 @@
-# Payment Checkout
+# Afirme Shieldgate Checkout
 
 ## Integrating Checkout
 
-ShieldGate Checkout, simplifies and secures online payment processing. Quickly integrate Checkout into your site to provide your users with a
-streamlined, mobile-ready payment experience that is constantly improving.
 
-The easiest way to integrate ShieldGate is via Checkout, an embedded tool that takes care of building an HTML form, validating user input,
-and securing your customers' card data. Using Checkout, sensitive credit card information is sent directly to ShieldGate, and does not touch your server. ShieldGate returns to your site a transaction object with the result of the operation.
+Afirme Shieldgate Checkout, simplifica el procesamiento de pagos en línea de manera segura. Integra rápidamente el Checkout en su sitio para
+ proporcionar a sus usuarios una solución optimizada, ofreciendo una experiencia de pago preparada para dispositivos móviles que mejora 
+ constantemente.
 
-To see Checkout in action, click the button above, filling in the resulting form with:
-
-* Any random, syntactically valid email address (the more random, the better)
-* Any Phone Number, such as 777777777
-* Any Card Holder´s Name
-* One of [ShieldGate's test card numbers](https://shieldgate.github.io/api-doc/#test-cards), such as 4111111111111111
-* Any three-digit CVC code
-* Any expiration date in the future
-
-[View working example >](https://developers.shieldgate.mx/docs/payments/#checkout)
+La forma más fácil de integrar Afirme Shieldgate es a través de Checkout, una herramienta integrada que se encarga de crear un formulario HTML, 
+validar la entrada del usuario y proteger los datos de la tarjeta de sus clientes. Al usar Checkout, la información confidencial de la 
+tarjeta de crédito se envía directamente a Afirme Shieldgate y no toca tu servidor. Afirme Shieldgate devuelve a tu sitio un objeto de 
+transacción con el resultado de la operación.
 
 
-## Integration
+Para ver el Checkout en acción, haz clic en el botón de arriba y completa el formulario con:
 
-The custom integration requires solid JavaScript skills.
+* Cualquier dirección de correo electrónico aleatoria y sintácticamente válida (cuanto más aleatoria, mejor)
+* Cualquier número de teléfono, como 777777777
+* Nombre de cualquier titular de tarjeta
+* Uno de los [números de tarjeta de prueba](https://developers.globalpay.com.co/api/#tarjetas-de-prueba), como 4111111111111111
+* Cualquier código CVC de tres dígitos
+* Cualquier fecha de vencimiento a futuro
 
-When your page loads, you should create a handler object using `paymentCheckout.modal()`. You can then call `open()` on the handler in
- response to any event. If you need to abort the Checkout process—for example, when navigation occurs in a single-page application,
- call `close()` on the handler.
+[Ver ejemplo de trabajo](https://developers.globalpay.com.co/docs/payments/#checkout)
 
 
-``` html
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Example | Payment Checkout Js</title>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="https://cdn.shieldgate.mx/ccapi/sdk/payment_checkout_stable.min.js"></script>
-</head>
-<body>
-<button class="js-payment-checkout">Pay with Card</button>
-<div id="response"></div>
+## Integración
 
-<script>
+La integración personalizada requiere habilidades sólidas de JavaScript.
+
+Cuando se carga su página, debe crear un objeto controlador utilizando `paymentCheckout.modal()`. Luego puede llamar la función `open()` en el 
+controlador en respuesta a cualquier evento. Si necesita abortar el proceso de pago, por ejemplo, cuando la navegación ocurre en una 
+aplicación de una sola página, llame la función `close()` en el controlador.
+
+
+```html
+<script src="https://cdn.shieldgate.mx/ccapi/sdk/payment_checkout_2.0.0.min.js" charset="UTF-8"></script>
+
+<button class="js-payment-checkout">Compra</button>
+
+
+<script>    
   let paymentCheckout = new PaymentCheckout.modal({
-    client_app_code: 'PAYMENT_CLIENT_APP_CODE', // Client Credentials
-    client_app_key: 'PAYMENT_CLIENT_APP_KEY', // Client Credentials
-    locale: 'es', // User's preferred language (es, en, pt). English will be used by default.
-    env_mode: 'stg', // `prod`, `stg`, `local` to change environment. Default is `stg`
-    onOpen: function () {
-      console.log('modal open');
-    },
-    onClose: function () {
-      console.log('modal closed');
-    },
-    onResponse: function (response) { // The callback to invoke when the Checkout process is completed
+      client_app_code: 'PAYMENT_CLIENT_APP_CODE', // Application Code de las credenciales CLIENT
+      client_app_key: 'PAYMENT_CLIENT_APP_KEY', // Application Key de las credenciales CLIENT
+      locale: 'es', // Idioma preferido del usuario (es, en, pt). El inglés se usará por defecto
+      env_mode: 'stg', // `prod`, `stg`, `local` para cambiar de ambiente. Por defecto es `stg`
+      onOpen: function() {
+          console.log('Modal abierto');
+      },
+      onClose: function() {
+          console.log('Modal cerrado');
+      },
+      onResponse: function(response) { // Funcionalidad a invocar cuando se completa el proceso de pago
+          
+          /*
+            En caso de error, esta será la respuesta.
+            response = {
+              "error": {
+                "type": "Server Error",
+                "help": "Try Again Later",
+                "description": "Sorry, there was a problem loading Checkout."
+              }
+            }
 
-      /*
-        In Case of an error, this will be the response.
-        response = {
-          "error": {
-            "type": "Server Error",
-            "help": "Try Again Later",
-            "description": "Sorry, there was a problem loading Checkout."
-          }
-        }
-
-        When the User completes all the Flow in the Checkout, this will be the response.
-        response = {
-          "transaction":{
-              "status": "success", // success or failure
-              "id": "CB-81011", // transaction_id
-              "status_detail": 3 // for the status detail please refer to: https://shieldgate.github.io/api-doc/#status-details
-          }
-        }
-      */
-      console.log('modal response');
-      document.getElementById('response').innerHTML = JSON.stringify(response);
-    }
+            Cual el usuario completa el flujo en el Checkout, esta será la respuesta
+            response = {  
+              "transaction":{  
+                  "status":"success", // Estado de la transacción
+                  "id":"CB-81011", // Id de la transacción de lado de la pasarela
+                  "status_detail":3 // Para más detalles de los detalles de estado: https://developers.shieldgate.mx/api/#detalle-de-los-estados
+              }
+            }
+          */
+          console.log('Respuesta de modal');
+          document.getElementById('response').innerHTML = JSON.stringify(response);            
+      }
   });
 
   let btnOpenCheckout = document.querySelector('.js-payment-checkout');
-  btnOpenCheckout.addEventListener('click', function () {
+  btnOpenCheckout.addEventListener('click', function(){
+    // Open Checkout with further options:
     paymentCheckout.open({
       user_id: '1234',
-      user_email: 'jhon@doe.com', //optional
-      user_phone: '7777777777', //optional
+      user_email: 'dev@shieldgate.mx', // Opcional        
+      user_phone: '7777777777', // Opcional
       order_description: '1 Green Salad',
       order_amount: 1500,
       order_vat: 0,
       order_reference: '#234323411',
-      //order_installments_type: 2, // optional: The installments type are only available for Equador. The valid values are: https://shieldgate.github.io/api-doc/#installments-type
-      //order_taxable_amount: 0, // optional: Only available for Datafast (Equador). The taxable amount, if it is zero, it is calculated on the total. Format: Decimal with two fraction digits.
-      //order_tax_percentage: 10 // optional: Only available for Datafast (Equador). The tax percentage to be applied to this order.
+      //order_installments_type: 2, // Opcional: Para Ecuador los valores válidos son: https://developers.shieldgate.mx/api/#metodos-de-pago-tarjetas-cobro-con-token-tipos-de-diferidos. Para el resto de los países, 0 para permitir cuotas, -1 en caso contrario.
+      //order_taxable_amount: 0, // Opcional: Solo disponible para Datafast (Ecuador). El importe imponible, si es cero, se calcula sobre el total. Formato: decimal con dos dígitos de fracción.
+      //order_tax_percentage: 10 // Opcional: Solo disponible para Datafast (Ecuador). El porcentaje de impuestos que se aplicará a este pedido.
+      //conf_exclusive_types: 'ak,ex', // Opcional: Tipos de tarjeta permitidos para esta operación. Opciones: https://developers.shieldgate.mx/api/#metodos-de-pago-tarjetas-marcas-de-tarjetas
+      //conf_invalid_card_type_message: 'Tarjeta invalida para esta operación' // Opcional: Define un mensaje personalizado para mostrar para los tipos de tarjeta no válidos.
     });
   });
-
-  window.addEventListener('popstate', function () {
+  
+  // Cerrar el Checkout en la navegación de la página:
+  window.addEventListener('popstate', function() {
     paymentCheckout.close();
   });
 </script>
-</body>
-</html>
 
 ```
 
-## Configuration options
+## Opciones de configuración
 
-Change how Checkout looks and behaves using the following configuration options.
+Cambia la apariencia y el comportamiento de Checkout con las siguientes opciones de configuración.
 
 ### PaymentCheckout.modal
-| Parameter       | Required | Description                                                                                              |
+
+| Parámetro       | Requerido | Descripción                                                                                             |
 |-----------------|----------|----------------------------------------------------------------------------------------------------------|
-| client_app_code | yes      | Client Credentials                                                                                       |
-| client_app_key  | yes      | Client Credentials                                                                                       |
-| env_mode        | yes      | `prod`, `stg`, `local` to change environment. Default is `stg`                                           |
-| locale          | no       | User's preferred language (`es`, `en`, `pt`). English will be used by default.                           |
-| onOpen          | no       | `function()` The callback to invoke when Checkout is opened                                              |
-| onClose         | no       | `function()` The callback to invoke when Checkout is closed                                              |
-| onResponse      | yes      | function([responseObject](#responseObject)) The callback to invoke when the Checkout process is complete |
+| client_app_code | sí       | Application Code de las credenciales CLIENT                                                              |
+| client_app_key  | sí       | Application KEY de las credenciales CLIENT                                                               |
+| env_mode        | sí       | `prod`, `stg`, `local` para cambiar de ambiente. Por defecto es `stg`                                    |
+| locale          | no       | Idioma preferido del usuario (es, en, pt). El inglés se usará por defecto                                |
+| onOpen          | no       | `function()` Callback a invocar cuando el Checkout es abierto                                            |
+| onClose         | no       | `function()` Callback a invocar cuando el Checkout es cerrado                                            |
+| onResponse      | sí       | function([responseObject](#objeto-de-respuesta)) Callback a invocar cuando el proceso del Checkout es completado |
 
-#### responseObject
+#### Objeto de respuesta
 
-When the User completes all the Flow in the Checkout, this will be the response.
-``` javascript
+Cuando el usuario complete todo el flujo en el proceso de pago, esta será la respuesta.
+```javascript
 {  
-   "transaction":{  
-       "status":"success", // success or failure
-        "id":"CB-81011", // transaction_id
-        "status_detail":3 // for the status detail please refer to: https://paymentez.github.io/api-doc/#status-details
-   }
+  "transaction": {  
+    "status": "success", // Estado de la transacción
+    "id": "CB-81011", // Id de la transacción de lado de la pasarela
+    "status_detail": 3 // Para más detalles de los detalles de estado: https://developers.shieldgate.mx/api/#detalle-de-los-estados
+  }
 }
 ```
 
-In Case of an error, this will be the response.
-``` javascript
+En caso de error, esta será la respuesta.
+```javascript
 {
   "error": {
     "type": "Server Error",
@@ -146,36 +147,36 @@ In Case of an error, this will be the response.
 
 
 ### PaymentCheckout.open
-| Parameter                      | Required | Description                                                                                                                                                      |
-|--------------------------------|----------|------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| user_id                        | yes      | Customer identifier. This is the identifier you use inside your application.                                                                                     |
-| user_email                     | no       | If you already know the email address of your user, you can provide it to Checkout to be prefilled.                                                              |
-| user_phone                     | no       | If you already know the phone of your user, you can provide it to Checkout to be prefilled.                                                                      |
-| order_description              | yes      | A description of the product or service being purchased.                                                                                                         |
-| order_amount                   | yes      | The amount that's shown to the user. Format: Decimal with two fraction digits.                                                                                   |
-| order_vat                      | yes      | Sales tax amount, included in product cost. Format: Decimal with two fraction digits.                                                                            |
-| order_reference                | yes      | Merchant order reference. You will identify this purchase using this reference.                                                                                  |
-| order_installments_type        | no       | For Equador  the valid values are: https://shieldgate.github.io/api-doc/#installments-type.  For the rest of the countries, 0 to allow installments, -1 otherwise.|
-| order_taxable_amount           | no       | Only available for Datafast (Equador). The taxable amount, if it is zero, it is calculated on the total. Format: Decimal with two fraction digits.               |
-| order_tax_percentage           | no       | Only available for Datafast (Equador). The tax percentage to be applied to this order.                                                                           |
-| conf_exclusive_types           | no       | Allowed card types to this operation.                                                                                                                            |
-| conf_invalid_card_type_message | no       | Define a custom message to show for invalid card types.                                                                                                          |
+| Parámetro                      | Requerido | Descripción                                                                                                                                               |
+|--------------------------------|----|------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| user_id                        | sí | Identificador del cliente Este es el identificador que usa dentro de su aplicación.                                                                              |
+| user_email                     | no | Si ya conoces la dirección de correo electrónico de tu usuario, puedes proporcionarla al Checkout para que se complete previamente.                              |
+| user_phone                     | no | Si ya conoces el teléfono de tu usuario, puedes proporcionarlo al Checkout para que se complete previamente.                                                     |
+| order_description              | sí | Una descripción del producto o servicio que se compra.                                                                                                           |
+| order_amount                   | sí | La cantidad que se muestra al usuario. Formato: decimal con dos dígitos de fracción.                                                                             |
+| order_vat                      | sí | Importe del impuesto sobre las ventas, incluido en el costo del producto. Formato: decimal con dos dígitos de fracción.                                          |
+| order_reference                | sí | Referencia de pedido de comerciante. Identificarás esta compra utilizando esta referencia.                                                                       |
+| order_installments_type        | no | Para Ecuador los valores válidos son: https://developers.shieldgate.mx/api/#metodos-de-pago-tarjetas-cobro-con-token-tipos-de-diferidos. Para el resto de los países, 0 para permitir cuotas, -1 en caso contrario.|
+| order_taxable_amount           | no | Solo disponible para Datafast (Ecuador). El importe imponible, si es cero, se calcula sobre el total. Formato: decimal con dos dígitos de fracción.              |
+| order_tax_percentage           | no | Solo disponible para Datafast (Ecuador). El porcentaje de impuestos que se aplicará a este pedido.                                                               |
+| conf_exclusive_types           | no | Tipos de tarjeta permitidos para esta operación. Opciones: https://developers.shieldgate.mx/api/#metodos-de-pago-tarjetas-marcas-de-tarjetas                  |
+| conf_invalid_card_type_message | no | Define un mensaje personalizado para mostrar para los tipos de tarjeta no válidos.                                                                               |
 
 
-## HTTPS requirements
+## Requisitos HTTPS
 
-All submissions of payment info using Checkout are made via a secure HTTPS connection. However, in order to protect yourself from certain
- forms of man-in-the-middle attacks, you must serve the page containing the payment form over HTTPS as well. In short, the address of the
-  page containing Checkout must start with `https://` rather than just `http://`.
+Todos los envíos de información de pago mediante Checkout se realizan a través de una conexión HTTPS segura. Sin embargo, para protegerse de
+ ciertas formas de ataques man-in-the-middle, también debe servir la página que contiene el formulario de pago a través de HTTPS. En resumen, 
+ la dirección de la página que contiene Checkout debe comenzar con `https: //` en lugar de solo `http: //`.
 
-## Supported browsers
+## Navegadores compatibles
 
-Checkout strives to support all recent versions of major browsers. For the sake of security and providing the best experience to the
- majority of customers, we do not support browsers that are no longer receiving security updates and represent a small minority of traffic.
+Checkout se esfuerza por admitir todas las versiones recientes de los principales navegadores. Por razones de seguridad y para proporcionar la mejor experiencia a la mayoría de los clientes, no admitimos navegadores que ya no reciben actualizaciones de seguridad y representan una pequeña minoría de tráfico.
 
 
-## Prevent Checkout from being blocked
+## Evitar que se bloquee Checkout
 
-You can prevent Checkout's popup from being blocked by calling `paymentCheckout.open` when the user clicks on an element on the page.
- Do not call `paymentCheckout.open` in a callback. This design indicates to the browser that the user is explicitly requesting the popup.
-  Otherwise, mobile devices and some versions of Internet Explorer will block the popup and prevent users from checking out.
+Puede evitar que se bloquee la ventana emergente de Checkout llamando a `paymentCheckout.open` cuando el usuario hace clic en un elemento de
+ la página. No llames a `paymentCheckout.open` dentro de un callback. Este diseño indica al navegador que el usuario está solicitando 
+ explícitamente la ventana emergente. De lo contrario, los dispositivos móviles y algunas versiones de Internet Explorer bloquearán la 
+ ventana emergente y evitarán que el uso adecuado por el cliente.
