@@ -18,11 +18,11 @@ Para ver el Checkout en acción, haz clic en el botón de arriba y completa el f
 * Cualquier dirección de correo electrónico aleatoria y sintácticamente válida (cuanto más aleatoria, mejor)
 * Cualquier número de teléfono, como 777777777
 * Nombre de cualquier titular de tarjeta
-* Uno de los [números de tarjeta de prueba](https://developers.globalpay.com.co/api/#tarjetas-de-prueba), como 4111111111111111
+* Uno de los [números de tarjeta de prueba](https://developers.shieldgate.mx/api/#tarjetas-de-prueba), como 4111111111111111
 * Cualquier código CVC de tres dígitos
 * Cualquier fecha de vencimiento a futuro
 
-[Ver ejemplo de trabajo](https://developers.globalpay.com.co/docs/payments/#checkout)
+[Ver ejemplo de trabajo](https://developers.shieldgate.mx/docs/payments/#checkout)
 
 
 ## Integración
