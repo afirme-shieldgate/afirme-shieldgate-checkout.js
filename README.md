@@ -68,7 +68,7 @@ aplicación de una sola página, llame la función `close()` en el controlador.
             response = {  
               "transaction":{  
                   "status":"success", // Estado de la transacción
-                  "id":"CB-81011", // Id de la transacción de lado de la pasarela
+                  "id":"PR-81011", // Id de la transacción de lado de la pasarela
                   "status_detail":3 // Para más detalles de los detalles de estado: https://developers.shieldgate.mx/api/#detalle-de-los-estados
               }
             }
@@ -89,9 +89,7 @@ aplicación de una sola página, llame la función `close()` en el controlador.
       order_amount: 1500,
       order_vat: 0,
       order_reference: '#234323411',
-      //order_installments_type: 2, // Opcional: Para Ecuador los valores válidos son: https://developers.shieldgate.mx/api/#metodos-de-pago-tarjetas-cobro-con-token-tipos-de-diferidos. Para el resto de los países, 0 para permitir cuotas, -1 en caso contrario.
-      //order_taxable_amount: 0, // Opcional: Solo disponible para Datafast (Ecuador). El importe imponible, si es cero, se calcula sobre el total. Formato: decimal con dos dígitos de fracción.
-      //order_tax_percentage: 10 // Opcional: Solo disponible para Datafast (Ecuador). El porcentaje de impuestos que se aplicará a este pedido.
+      //order_installments_type: 2, // Opcional: 0 para permitir cuotas, -1 en caso contrario.
       //conf_exclusive_types: 'ak,ex', // Opcional: Tipos de tarjeta permitidos para esta operación. Opciones: https://developers.shieldgate.mx/api/#metodos-de-pago-tarjetas-marcas-de-tarjetas
       //conf_invalid_card_type_message: 'Tarjeta invalida para esta operación' // Opcional: Define un mensaje personalizado para mostrar para los tipos de tarjeta no válidos.
     });
@@ -128,7 +126,7 @@ Cuando el usuario complete todo el flujo en el proceso de pago, esta será la re
 {  
   "transaction": {  
     "status": "success", // Estado de la transacción
-    "id": "CB-81011", // Id de la transacción de lado de la pasarela
+    "id": "PR-81011", // Id de la transacción de lado de la pasarela
     "status_detail": 3 // Para más detalles de los detalles de estado: https://developers.shieldgate.mx/api/#detalle-de-los-estados
   }
 }
@@ -156,10 +154,10 @@ En caso de error, esta será la respuesta.
 | order_amount                   | sí | La cantidad que se muestra al usuario. Formato: decimal con dos dígitos de fracción.                                                                             |
 | order_vat                      | sí | Importe del impuesto sobre las ventas, incluido en el costo del producto. Formato: decimal con dos dígitos de fracción.                                          |
 | order_reference                | sí | Referencia de pedido de comerciante. Identificarás esta compra utilizando esta referencia.                                                                       |
-| order_installments_type        | no | Para Ecuador los valores válidos son: https://developers.shieldgate.mx/api/#metodos-de-pago-tarjetas-cobro-con-token-tipos-de-diferidos. Para el resto de los países, 0 para permitir cuotas, -1 en caso contrario.|
-| order_taxable_amount           | no | Solo disponible para Datafast (Ecuador). El importe imponible, si es cero, se calcula sobre el total. Formato: decimal con dos dígitos de fracción.              |
-| order_tax_percentage           | no | Solo disponible para Datafast (Ecuador). El porcentaje de impuestos que se aplicará a este pedido.                                                               |
-| conf_exclusive_types           | no | Tipos de tarjeta permitidos para esta operación. Opciones: https://developers.shieldgate.mx/api/#metodos-de-pago-tarjetas-marcas-de-tarjetas                  |
+| order_installments_type        | no | 0 para permitir cuotas, -1 en caso contrario.
+|
+| conf_exclusive_types           | no | Tipos de tarjeta permitidos para esta operación. Opciones: https://developers.shieldgate.mx/api/#metodos-de-pago-tarjetas-marcas-de-tarjetas                  
+|
 | conf_invalid_card_type_message | no | Define un mensaje personalizado para mostrar para los tipos de tarjeta no válidos.                                                                               |
 
 
