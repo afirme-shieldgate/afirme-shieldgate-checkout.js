@@ -35,7 +35,7 @@ aplicación de una sola página, llame la función `close()` en el controlador.
 
 
 ```html
-<script src="https://cdn.shieldgate.mx/ccapi/sdk/payment_checkout_2.0.0.min.js" charset="UTF-8"></script>
+<script src="https://cdn.shieldgate.mx/ccapi/sdk/payment_checkout_stable.min.js" charset="UTF-8"></script>
 
 <button class="js-payment-checkout">Compra</button>
 
